@@ -1,0 +1,31 @@
+{
+  "name": "api_script",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shahzeb2000786/HACKPSU2020.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shahzeb2000786/HACKPSU2020/issues"
+  },
+  "homepage": "https://github.com/shahzeb2000786/HACKPSU2020#readme",
+  "description": ""
+}

@@ -17,7 +17,6 @@ async function getDailyStock(ticker) {
   baseUrl = baseUrl + ticker + "&apikey=" + apiKey
   axios.get(baseUrl)
     .then(function (response) {
-      // handle success
       let dailyJSONStockArray = response.data["Time Series (Daily)"]
 
       for (objectKey in dailyJSONStockArray){
@@ -72,14 +71,11 @@ async function getCurrentStock(ticker) {
   const promise = axios.get(baseurl)
   const dataPromise = promise.then((response) => response.data)
   return dataPromise
-
     .catch((err) => {
       // handle error
       console.log(err);
       return -1
     })
-
-
 }
 
 

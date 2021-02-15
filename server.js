@@ -116,8 +116,6 @@ async function getCompanyOverview(ticker) {
       return -1;
     })
 }
-
-
 app.get("/current/:ticker", async (req, res) => {
   let stock = await getCurrentStock(req.params.ticker)
   let convertedStock = convertJSONToStock(stock)

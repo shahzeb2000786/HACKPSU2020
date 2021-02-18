@@ -11,37 +11,25 @@ let dailyStockPrices = [];
 let currentStock = new Stock();
 let companyOverView = null;
 
+
+
+
+
 async function getDailyStock(ticker) {
   dailyStockPrices = []
-  var baseUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol="
+  let testArr = []
+  var baseUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&outputsize=compact&symbol="
   baseUrl = baseUrl + ticker + "&apikey=" + apiKey
-  axios.get(baseUrl)
-    .then(function (response) {
-      let dailyJSONStockArray = response.data["Time Series (Daily)"]
+  let promise = axios.get(baseUrl)
+  let dataPromise = promise.then((response) => response.data["Time Series (Daily)"])
 
-      for (objectKey in dailyJSONStockArray){
-        let stock = new Stock();
-        let stockJSON = dailyJSONStockArray[objectKey];
-        let close = (stockJSON["5. adjusted close"]);
-        stock.price = close;
-        stock.open = stockJSON["1. open"];
-        stock.high = stockJSON["2. high"];
-        stock.low = stockJSON["3. low"];
-        stock.date = objectKey;
-        stock.volume = stockJSON["6. volume"];
-        dailyStockPrices.unshift(stock);
-      }
 
-    })
+  return dataPromise
     .catch(function (err) {
-      // handle error
       console.log(err)
       return -1
     })
-    .then(function () {
-      console.log("executed");
-      return 0
-    });
+
 }
 
 function convertJSONToStock(stockData){
@@ -140,20 +128,26 @@ app.get("/overview/:ticker", (req,res) => {
 
 //---------------------------------------------To edit------------------------------------
 
-app.get("/daily/:ticker", (req, res) => {
+app.get("/daily/:ticker", async (req, res) => {
 
-  getDailyStock(req.params.ticker)
-  setTimeout(function() {
-    if (dailyStockPrices == []) {
-      res.json({
-        error: "Error making request to alpha vantage api"
-      })
-    } else {
-      //console.log(dailyStockPrices)
-      res.json(dailyStockPrices)
+  let dailyStockPricess = await getDailyStock(req.params.ticker)
+  let dailyStocks = []
+  console.log(typeof(dailyStockPricess))
+  for (objectKey in dailyStockPricess){
+    //console.log(dailyStockPricess[objectKey])
+        let stock = new Stock();
+        let stockJSON = dailyStockPricess[objectKey];
+        let close = (stockJSON["5. adjusted close"]);
+        stock.price = close;
+        stock.open = stockJSON["1. open"];
+        stock.high = stockJSON["2. high"];
+        stock.low = stockJSON["3. low"];
+        stock.date = objectKey;
+        stock.volume = stockJSON["6. volume"];
+        dailyStocks.unshift(stock);
+
     }
-    dailyStockPrices = []
-  }, 1000)
+  res.json(dailyStocks)
 
 })
 app.listen(process.env.PORT || 3000, function() {

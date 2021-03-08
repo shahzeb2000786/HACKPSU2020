@@ -18,7 +18,7 @@ let companyOverView = null;
 async function getDailyStock(ticker) {
   dailyStockPrices = []
   let testArr = []
-  var baseUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&outputsize=compact&symbol="
+  var baseUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&outputsize=full&symbol="
   baseUrl = baseUrl + ticker + "&apikey=" + apiKey
   let promise = axios.get(baseUrl)
   let dataPromise = promise.then((response) => response.data["Time Series (Daily)"])
@@ -128,11 +128,12 @@ app.get("/overview/:ticker", (req,res) => {
 
 //---------------------------------------------To edit------------------------------------
 
-app.get("/daily/:ticker", async (req, res) => {
-
+app.get("/daily/:ticker/:numberOfDays", async (req, res) => {
+  let numberOfDays = parseInt(req.params.numberOfDays);
   let dailyStockPricess = await getDailyStock(req.params.ticker)
   let dailyStocks = []
   console.log(typeof(dailyStockPricess))
+  //daily
   for (objectKey in dailyStockPricess){
     //console.log(dailyStockPricess[objectKey])
         let stock = new Stock();
@@ -147,9 +148,10 @@ app.get("/daily/:ticker", async (req, res) => {
         dailyStocks.unshift(stock);
 
     }
+    dailyStocks = dailyStocks.slice((dailyStocks.length-1) - numberOfDays, dailyStocks.length)
   res.json(dailyStocks)
-
 })
+
 app.listen(process.env.PORT || 3000, function() {
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
 });

@@ -148,6 +148,12 @@ app.get("/daily/:ticker/:numberOfDays", async (req, res) => {
         dailyStocks.unshift(stock);
 
     }
+    if (numberOfDays > dailyStockPricess.length){
+      res.json(dailyStocksPricess)
+    }
+    if (numberOfDays == null){
+      res.json(dailyStockPrices)
+    }
     dailyStocks = dailyStocks.slice((dailyStocks.length-1) - numberOfDays, dailyStocks.length)
   res.json(dailyStocks)
 })

@@ -11,10 +11,6 @@ let dailyStockPrices = [];
 let currentStock = new Stock();
 let companyOverView = null;
 
-
-
-
-
 async function getDailyStock(ticker) {
   dailyStockPrices = []
   let testArr = []
@@ -22,7 +18,6 @@ async function getDailyStock(ticker) {
   baseUrl = baseUrl + ticker + "&apikey=" + apiKey
   let promise = axios.get(baseUrl)
   let dataPromise = promise.then((response) => response.data["Time Series (Daily)"])
-
 
   return dataPromise
     .catch(function (err) {
@@ -136,26 +131,24 @@ app.get("/daily/:ticker/:numberOfDays", async (req, res) => {
   //daily
   for (objectKey in dailyStockPricess){
     //console.log(dailyStockPricess[objectKey])
-        let stock = new Stock();
-        let stockJSON = dailyStockPricess[objectKey];
-        let close = (stockJSON["5. adjusted close"]);
-        stock.price = close;
-        stock.open = stockJSON["1. open"];
-        stock.high = stockJSON["2. high"];
-        stock.low = stockJSON["3. low"];
-        stock.date = objectKey;
-        stock.volume = stockJSON["6. volume"];
-        dailyStocks.unshift(stock);
-
-    }
-    if (numberOfDays > dailyStockPricess.length){
-      res.json(dailyStocksPricess)
-    }
-    if (numberOfDays == null){
-      res.json(dailyStockPrices)
-    }
-    dailyStocks = dailyStocks.slice((dailyStocks.length-1) - numberOfDays, dailyStocks.length)
-  res.json(dailyStocks)
+      let stock = new Stock();
+      let stockJSON = dailyStockPricess[objectKey];
+      let close = (stockJSON["5. adjusted close"]);
+      stock.price = close;
+      stock.open = stockJSON["1. open"];
+      stock.high = stockJSON["2. high"];
+      stock.low = stockJSON["3. low"];
+      stock.date = objectKey;
+      stock.volume = stockJSON["6. volume"];
+      dailyStocks.push(stock);
+  }
+//  console.log(dailyStocks)
+  if (numberOfDays > dailyStockPricess.length || numberOfDays === null){
+    res.json(dailyStocksPricess)
+  }else{
+    dailyStocks = dailyStocks.slice(0, numberOfDays);
+    res.json(dailyStocks)
+  }
 })
 
 app.listen(process.env.PORT || 3000, function() {

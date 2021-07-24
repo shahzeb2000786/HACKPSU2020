@@ -152,35 +152,7 @@ app.get("/daily/:ticker/:numberOfDays", async (req, res) => {
     dailyStocks = dailyStocks.slice((dailyStocks.length-1) - numberOfDays, dailyStocks.length)
   res.json(dailyStocks)
 })
-//
-//
-// let numberOfDays = parseInt(req.params.numberOfDays);
-// let dailyStockPricess = await getDailyStock(req.params.ticker)
-// let dailyStocks = []
-// console.log(typeof(dailyStockPricess))
-// //daily
-// for (objectKey in dailyStockPricess){
-//   //console.log(dailyStockPricess[objectKey])
-//       let stock = new Stock();
-//       let stockJSON = dailyStockPricess[objectKey];
-//       let close = (stockJSON["5. adjusted close"]);
-//       stock.price = close;
-//       stock.open = stockJSON["1. open"];
-//       stock.high = stockJSON["2. high"];
-//       stock.low = stockJSON["3. low"];
-//       stock.date = objectKey;
-//       stock.volume = stockJSON["6. volume"];
-//       dailyStocks.unshift(stock);
-//
-//   }
-//   if (numberOfDays > dailyStockPricess.length){
-//     res.json(dailyStocksPricess)
-//   }
-//   if (numberOfDays == null){
-//     res.json(dailyStockPrices)
-//   }
-//   dailyStocks = dailyStocks.slice((dailyStocks.length-1) - numberOfDays, dailyStocks.length)
-// res.json(dailyStocks)
+
 
 app.listen(process.env.PORT || 3000, function() {
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);

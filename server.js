@@ -125,14 +125,13 @@ app.get("/overview/:ticker", (req,res) => {
 
 app.get("/daily/:ticker/:numberOfDays", async (req, res) => {
   let numberOfDays = parseInt(req.params.numberOfDays);
-  let dailyStockPricess = await getDailyStock(req.params.ticker)
+  let dailyStockPriceObjects = await getDailyStock(req.params.ticker)
   let dailyStocks = []
-  console.log(typeof(dailyStockPricess))
   //daily
-  for (objectKey in dailyStockPricess){
-    //console.log(dailyStockPricess[objectKey])
+  for (objectKey in dailyStockPriceObjects){
+    //console.log(dailyStockPriceObjects[objectKey])
         let stock = new Stock();
-        let stockJSON = dailyStockPricess[objectKey];
+        let stockJSON = dailyStockPriceObjects[objectKey];
         let close = (stockJSON["5. adjusted close"]);
         stock.price = close;
         stock.open = stockJSON["1. open"];
@@ -143,7 +142,7 @@ app.get("/daily/:ticker/:numberOfDays", async (req, res) => {
         dailyStocks.push(stock);
 
     }
-    if (numberOfDays > dailyStockPricess.length){
+    if (numberOfDays > dailyStockPriceObjects.length){
       res.json(dailyStocksPricess)
     }
     if (numberOfDays == null){

@@ -42,7 +42,7 @@ function convertJSONToStock(stockData){
         let changePercent = (stockGlobalQuote["10. change percent"])
 
       currentStock = new Stock(ticker,open,high,low,price,volume,date,previousClose,change,changePercent);
-      testStock = new Stock(ticker,open,high,low,price,volume,date,previousClose,change,changePercent);
+      let testStock = new Stock(ticker,open,high,low,price,volume,date,previousClose,change,changePercent);
       return testStock
 }
 
@@ -56,7 +56,7 @@ async function getCurrentStock(ticker) {
   return dataPromise
     .catch((err) => {
       // handle error
-      console.log(err);
+      console.log(err.message);
       return -1
     })
 }
@@ -95,7 +95,7 @@ async function getCompanyOverview(ticker) {
   const dataPromise = promise.then((response) => response.data)
   return dataPromise
     .catch(function (error) {
-      console.log(error);
+      console.log(error.message);
       return -1;
     })
 }
@@ -129,7 +129,6 @@ app.get("/daily/:ticker/:numberOfDays", async (req, res) => {
   let dailyStocks = []
   //daily
   for (objectKey in dailyStockPriceObjects){
-    //console.log(dailyStockPriceObjects[objectKey])
         let stock = new Stock();
         let stockJSON = dailyStockPriceObjects[objectKey];
         let close = (stockJSON["5. adjusted close"]);
